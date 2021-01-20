@@ -10,12 +10,32 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     if (cart.products.length == 0)
       return Scaffold(
-        body: Center(
-          child: RaisedButton(
-            child: Text('Pesan Sekarang'),
-            onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => ProductListPage())),
-          ),
+        body: Stack(
+          children: [
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    child: Image.asset(
+                      'assets/cart_empty.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Text('Keranjangmu masih kosong, nih')
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: RaisedButton(
+                color: Colors.deepOrange,
+                child: Text('Pesan Sekarang'),
+                onPressed: () => Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => ProductListPage())),
+              ),
+            ),
+          ],
         ),
       );
 
