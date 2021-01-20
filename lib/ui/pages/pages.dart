@@ -6,3 +6,4 @@ import 'package:kulinary/shared/shared.dart';
 import 'package:kulinary/ui/widgets/widgets.dart';
 
 part 'product_list_page.dart';
+part 'cart_page.dart';

@@ -52,29 +52,14 @@ class _ProductListPageState extends State<ProductListPage> {
                   alignment: Alignment.bottomCenter,
                   child: Padding(
                     padding: const EdgeInsets.all(defaultMargin),
-                    child: Container(
-                      height: 60,
-                      child: RaisedButton(
-                        color: mainColor,
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                    '${cart.numItem} Item | Rp ${cart.totalPrice}'),
-                                Text('Termasuk ongkos kirim'),
-                              ],
-                            ),
-                            Icon(
-                              Icons.shop,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    child: CartButton(
+                        numItem: cart.numItem,
+                        total: cart.totalPrice,
+                        onTap: () {
+                          print("go to cart screen");
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => CartPage()));
+                        }),
                   ),
                 )
               : SizedBox(),

@@ -25,6 +25,20 @@ class Cart {
     numItem--;
     totalPrice -= product.price;
   }
+
+  void delete(Product product) {
+    Product subProduct = products.firstWhere((p) => p.id == product.id);
+    numItem -= subProduct.quantity;
+    totalPrice -= product.price * subProduct.quantity;
+
+    products.remove(subProduct);
+  }
+
+  void clear() {
+    products = [];
+    numItem = 0;
+    totalPrice = 0;
+  }
 }
 
 Cart cart = Cart();
