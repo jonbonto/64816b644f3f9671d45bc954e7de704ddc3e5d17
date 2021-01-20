@@ -8,16 +8,17 @@ class Product extends Equatable {
   final String packageName;
   final int price;
   final double rating;
+  int quantity;
 
-  Product({
-    @required this.id,
-    @required this.name,
-    @required this.imageUrl,
-    @required this.brandName,
-    @required this.packageName,
-    @required this.price,
-    @required this.rating,
-  });
+  Product(
+      {@required this.id,
+      @required this.name,
+      @required this.imageUrl,
+      @required this.brandName,
+      @required this.packageName,
+      @required this.price,
+      @required this.rating,
+      this.quantity = 0});
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],

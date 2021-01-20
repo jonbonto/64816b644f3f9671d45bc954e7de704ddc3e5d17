@@ -1,12 +1,14 @@
 part of 'widgets.dart';
 
 class ProductCard extends StatelessWidget {
+  final Cart cart;
   final Product product;
   final Function onTap;
   final double width;
   final double ratingSize;
 
-  ProductCard({this.product, this.onTap, this.width = 210, this.ratingSize});
+  ProductCard(
+      {this.cart, this.product, this.onTap, this.width = 210, this.ratingSize});
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +39,43 @@ class ProductCard extends StatelessWidget {
         ),
         Spacer(),
         Text('Rp ${product.price} termasuk ongkir'),
-        OutlinedButton(
-          onPressed: onTap,
-          child: Text("Tambah ke Keranjang"),
-        ),
+        cart.products.contains(product)
+            ? Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: OutlinedButton(
+                        onPressed: () {
+                          cart.substractProduct(product);
+                          onTap();
+                        },
+                        child: Text("-")),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: OutlinedButton(
+                        onPressed: null,
+                        child: Text(
+                            '${cart.products.firstWhere((p) => p.id == product.id).quantity}')),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: OutlinedButton(
+                        onPressed: () {
+                          cart.addProduct(product);
+                          onTap();
+                        },
+                        child: Text("+")),
+                  ),
+                ],
+              )
+            : OutlinedButton(
+                onPressed: () {
+                  cart.addProduct(product);
+                  onTap();
+                },
+                child: Text("Tambah ke Keranjang"),
+              ),
       ],
     );
   }
