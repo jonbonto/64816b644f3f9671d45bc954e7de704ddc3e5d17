@@ -16,24 +16,27 @@ class RatingStars extends StatelessWidget {
   Widget build(BuildContext context) {
     int n = (votingAverage / 2).round();
 
-    List<Widget> widgets = List.generate(
-      5,
-      (index) => Icon(index < n ? MdiIcons.star : MdiIcons.starOutline,
-          color: Color(0xFFFBD460), size: starSize),
+    List<Widget> widgets = [];
+
+    widgets.add(
+      Text(
+        "${(votingAverage * 10).round() / 10}",
+        style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w300,
+            fontSize: fontSize),
+      ),
     );
 
     widgets.add(SizedBox(
       width: 3,
     ));
-    widgets.add(
-      Text(
-        "$votingAverage/10",
-        style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w300,
-            fontSize: fontSize),
-      ),
-    );
+
+    widgets.addAll(List.generate(
+      5,
+      (index) => Icon(index < n ? MdiIcons.star : MdiIcons.starOutline,
+          color: Color(0xFFFBD460), size: starSize),
+    ));
     return Row(
       mainAxisAlignment: alignment,
       children: widgets,

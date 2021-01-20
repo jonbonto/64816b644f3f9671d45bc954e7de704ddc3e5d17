@@ -44,16 +44,18 @@ class MyHomePage extends StatelessWidget {
                   ),
                 );
               var products = snapshot.data;
+              final itemWidth =
+                  (MediaQuery.of(context).size.width - 2.5 * defaultMargin) / 2;
+              final itemHeight = 305;
               return GridView.count(
-                // Create a grid with 2 columns. If you change the scrollDirection to
-                // horizontal, this produces 2 rows.
                 crossAxisCount: 2,
-                // Generate 100 widgets that display their index in the List.
+                padding: EdgeInsets.all(defaultMargin),
+                childAspectRatio: (itemWidth / itemHeight),
+                crossAxisSpacing: 0.5 * defaultMargin,
+                mainAxisSpacing: 1.5 * defaultMargin,
                 children: List.generate(products.length, (index) {
                   return ProductCard(
-                    width: (MediaQuery.of(context).size.width -
-                            2.5 * defaultMargin) /
-                        2,
+                    width: itemWidth,
                     product: products[index],
                   );
                 }),
