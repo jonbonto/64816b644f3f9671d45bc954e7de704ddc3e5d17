@@ -8,6 +8,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
+    var cart = CartServices.cart;
     if (cart.products.length == 0) return CartPageEmpty();
 
     return Scaffold(

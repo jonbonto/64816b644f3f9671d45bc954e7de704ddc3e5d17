@@ -37,4 +37,6 @@ class CartServices {
     cart.clear();
     cartDbServices.clear();
   }
+
+  static get cart => cart;
 }

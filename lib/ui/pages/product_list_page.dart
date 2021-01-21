@@ -23,6 +23,7 @@ class _ProductListPageState extends State<ProductListPage> {
 
   @override
   Widget build(BuildContext context) {
+    var cart = CartServices.cart;
     bool showCart = cart.products.length != 0;
     return Scaffold(
       body: SafeArea(
@@ -60,72 +61,90 @@ class _ProductListPageState extends State<ProductListPage> {
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _SliverAppBarDelegate(
-                    child: PreferredSize(
-                  preferredSize: Size.fromHeight(60.0),
-                  child: Container(
-                    color: Theme.of(context).primaryColor,
-                    child: buildDatePicker(),
+                  child: PreferredSize(
+                    preferredSize: Size.fromHeight(60.0),
+                    child: Container(
+                      color: Theme.of(context).primaryColor,
+                      child: buildDatePicker(),
+                    ),
                   ),
-                )),
+                ),
               ),
             ];
           },
           body: Stack(
             children: [
               FutureBuilder<List<Product>>(
-                  future: ProductServices.getProducts(getPage(selectedDate)),
-                  builder: (_, snapshot) {
-                    if (!snapshot.hasData)
-                      return SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: SpinKitFadingCircle(
-                          color: accentColor3,
-                        ),
-                      );
-                    var products = snapshot.data;
-                    final itemWidth = (MediaQuery.of(context).size.width -
-                            2.5 * defaultMargin) /
-                        2;
-                    return GridView.count(
-                      crossAxisCount: 2,
-                      padding: EdgeInsets.all(defaultMargin),
-                      childAspectRatio: 1 / 2,
-                      crossAxisSpacing: 0.5 * defaultMargin,
-                      mainAxisSpacing: 1.5 * defaultMargin,
-                      children: List.generate(products.length, (index) {
+                future: ProductServices.getProducts(getPage(selectedDate)),
+                builder: (_, snapshot) {
+                  if (!snapshot.hasData)
+                    return SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: SpinKitFadingCircle(
+                        color: accentColor3,
+                      ),
+                    );
+                  var products = snapshot.data;
+                  final itemWidth = (MediaQuery.of(context).size.width -
+                          2.5 * defaultMargin) /
+                      2;
+
+                  return GridView.count(
+                    crossAxisCount: 2,
+                    padding: EdgeInsets.all(defaultMargin),
+                    childAspectRatio: 1 / 2,
+                    crossAxisSpacing: 0.5 * defaultMargin,
+                    mainAxisSpacing: 1.5 * defaultMargin,
+                    children: List.generate(
+                      products.length,
+                      (index) {
+                        CartItem item = CartItem(
+                            product: products[index], dateTime: selectedDate);
+                        final quantity = cart.contains(item)
+                            ? cart.products
+                                .firstWhere((p) => p.isEqual(item))
+                                .quantity
+                            : 0;
                         return ProductCard(
-                          cart: cart,
+                          quantity: quantity,
                           width: itemWidth,
-                          onTap: () => setState(() {}),
-                          selectedDate: selectedDate,
+                          onAddToCart: () => setState(() {
+                            CartServices.add(item);
+                          }),
+                          onChangeQuantity: (int addition) => setState(() {
+                            CartServices.changeItem(item, addition);
+                          }),
                           product: products[index],
                         );
-                      }),
-                    );
-                  }),
+                      },
+                    ),
+                  );
+                },
+              ),
               showCart
                   ? Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
                         padding: const EdgeInsets.all(defaultMargin),
                         child: CartButton(
-                            numItem: cart.numItem,
-                            total: cart.totalPrice,
-                            onTap: () {
-                              print("go to cart screen");
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => CartPage()));
-                            }),
+                          numItem: cart.numItem,
+                          total: cart.totalPrice,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => CartPage(),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     )
                   : SizedBox(),
-              // buildDatePicker(),
             ],
           ),
         ),
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 

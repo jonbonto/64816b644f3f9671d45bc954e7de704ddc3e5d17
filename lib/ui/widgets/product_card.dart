@@ -1,24 +1,24 @@
 part of 'widgets.dart';
 
 class ProductCard extends StatelessWidget {
-  final Cart cart;
   final Product product;
-  final Function onTap;
+  final Function onAddToCart;
+  final Function onChangeQuantity;
   final double width;
   final double ratingSize;
-  final String selectedDate;
+  final int quantity;
 
-  ProductCard(
-      {this.cart,
-      this.product,
-      this.onTap,
-      this.width = 210,
-      this.ratingSize,
-      this.selectedDate});
+  ProductCard({
+    this.product,
+    this.onAddToCart,
+    this.onChangeQuantity,
+    this.width = 210,
+    this.ratingSize,
+    this.quantity,
+  });
 
   @override
   Widget build(BuildContext context) {
-    CartItem item = CartItem(product: product, dateTime: selectedDate);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -46,41 +46,37 @@ class ProductCard extends StatelessWidget {
         ),
         Spacer(),
         Text('Rp ${product.price} termasuk ongkir'),
-        cart.contains(item)
+        quantity != 0
             ? Row(
                 children: [
                   Flexible(
                     flex: 1,
                     child: OutlinedButton(
                         onPressed: () {
-                          CartServices.changeItem(item, -1);
-                          onTap();
+                          onChangeQuantity(-1);
                         },
                         child: Text("-")),
                   ),
                   Flexible(
                     flex: 2,
                     child: OutlinedButton(
-                        onPressed: null,
-                        child: Text(
-                            '${cart.products.firstWhere((p) => p.isEqual(item)).quantity}')),
+                      onPressed: null,
+                      child: Text('$quantity'),
+                    ),
                   ),
                   Flexible(
                     flex: 1,
                     child: OutlinedButton(
-                        onPressed: () {
-                          CartServices.changeItem(item, 1);
-                          onTap();
-                        },
-                        child: Text("+")),
+                      onPressed: () {
+                        onChangeQuantity(1);
+                      },
+                      child: Text("+"),
+                    ),
                   ),
                 ],
               )
             : OutlinedButton(
-                onPressed: () {
-                  CartServices.add(item);
-                  onTap();
-                },
+                onPressed: onAddToCart,
                 child: Text("Tambah ke Keranjang"),
               ),
       ],
