@@ -13,6 +13,12 @@ class _ProductListPageState extends State<ProductListPage> {
     super.initState();
     DateTime now = DateTime.now();
     selectedDate = '${now.year}-${now.month}-${now.day}';
+    initCart();
+  }
+
+  void initCart() async {
+    await CartServices.init();
+    setState(() {});
   }
 
   @override

@@ -33,7 +33,7 @@ class _CartPageState extends State<CartPage> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            cart.clear();
+                            CartServices.clear();
                           });
                         },
                         child: Text('Hapus Pesanan'),
@@ -69,7 +69,7 @@ class _CartPageState extends State<CartPage> {
                 total: cart.totalPrice,
                 onTap: () {
                   setState(() {
-                    cart.clear();
+                    CartServices.clear();
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => ProductListPage()));
                   });

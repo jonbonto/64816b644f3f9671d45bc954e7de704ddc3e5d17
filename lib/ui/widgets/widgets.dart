@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kulinary/models/models.dart';
+import 'package:kulinary/services/services.dart';
 import 'package:kulinary/shared/shared.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 

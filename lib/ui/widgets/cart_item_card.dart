@@ -39,7 +39,7 @@ class CartItemCard extends StatelessWidget {
                   IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
-                        cart.delete(item);
+                        CartServices.deleteItem(item);
                         onTap();
                       }),
                 ],
@@ -60,7 +60,7 @@ class CartItemCard extends StatelessWidget {
                           flex: 1,
                           child: OutlinedButton(
                               onPressed: () {
-                                cart.changeQuantity(item, -1);
+                                CartServices.changeItem(item, -1);
                                 onTap();
                               },
                               child: Text("-")),
@@ -74,7 +74,7 @@ class CartItemCard extends StatelessWidget {
                           flex: 1,
                           child: OutlinedButton(
                               onPressed: () {
-                                cart.changeQuantity(item, 1);
+                                CartServices.changeItem(item, 1);
                                 onTap();
                               },
                               child: Text("+")),

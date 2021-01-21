@@ -53,7 +53,7 @@ class ProductCard extends StatelessWidget {
                     flex: 1,
                     child: OutlinedButton(
                         onPressed: () {
-                          cart.changeQuantity(item, -1);
+                          CartServices.changeItem(item, -1);
                           onTap();
                         },
                         child: Text("-")),
@@ -69,7 +69,7 @@ class ProductCard extends StatelessWidget {
                     flex: 1,
                     child: OutlinedButton(
                         onPressed: () {
-                          cart.changeQuantity(item, 1);
+                          CartServices.changeItem(item, 1);
                           onTap();
                         },
                         child: Text("+")),
@@ -78,7 +78,7 @@ class ProductCard extends StatelessWidget {
               )
             : OutlinedButton(
                 onPressed: () {
-                  cart.add(item);
+                  CartServices.add(item);
                   onTap();
                 },
                 child: Text("Tambah ke Keranjang"),
