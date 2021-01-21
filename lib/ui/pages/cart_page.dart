@@ -12,73 +12,104 @@ class _CartPageState extends State<CartPage> {
     if (cart.products.length == 0) return CartPageEmpty();
 
     return Scaffold(
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(defaultMargin),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Review Pesanan',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  SizedBox(
-                    height: defaultMargin,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Daftar Pesanan'),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            CartServices.clear();
-                          });
-                        },
-                        child: Text('Hapus Pesanan'),
-                      )
-                    ],
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height - 20,
-                    child: GroupedListView<CartItem, String>(
-                      elements: cart.products,
-                      groupBy: (element) => element.dateTime,
-                      groupSeparatorBuilder: (String groupByValue) =>
-                          Text(groupByValue),
-                      itemBuilder: (context, CartItem element) => CartItemCard(
-                        item: element,
-                        onTap: () {
-                          setState(() {});
-                        },
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              pinned: true,
+              floating: false,
+              expandedHeight: 120.0,
+              centerTitle: true,
+              flexibleSpace: LayoutBuilder(
+                builder: (BuildContext ctx, BoxConstraints constraints) {
+                  var top = constraints.biggest.height;
+                  return FlexibleSpaceBar(
+                    centerTitle: false,
+                    titlePadding: const EdgeInsets.all(0),
+                    title: AnimatedPadding(
+                      duration: Duration(milliseconds: 0),
+                      padding: EdgeInsets.only(left: 85 - top / 2, bottom: 16),
+                      child: Text(
+                        'Review Pesanan',
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
+                  );
+                },
+              ),
+              automaticallyImplyLeading: true,
+              backgroundColor: Colors.white,
+              elevation: 5,
+              iconTheme: IconThemeData(
+                color: Colors.black,
+              ),
+            ),
+          ];
+        },
+        body: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
+              child: ListView(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Daftar Pesanan'),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                CartServices.clear();
+                              });
+                            },
+                            child: Text('Hapus Pesanan'),
+                          )
+                        ],
+                      ),
+                      Container(
+                        child: GroupedListView<CartItem, String>(
+                          shrinkWrap: true,
+                          elements: cart.products,
+                          groupBy: (element) => element.dateTime,
+                          groupSeparatorBuilder: (String groupByValue) =>
+                              Text(groupByValue),
+                          itemBuilder: (context, CartItem element) =>
+                              CartItemCard(
+                            item: element,
+                            onTap: () {
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(defaultMargin),
-              child: CartButton(
-                checkout: true,
-                numItem: cart.numItem,
-                total: cart.totalPrice,
-                onTap: () {
-                  setState(() {
-                    CartServices.clear();
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => ProductListPage()));
-                  });
-                },
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(defaultMargin),
+                child: CartButton(
+                  checkout: true,
+                  numItem: cart.numItem,
+                  total: cart.totalPrice,
+                  onTap: () {
+                    setState(() {
+                      CartServices.clear();
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => ProductListPage()));
+                    });
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
