@@ -14,7 +14,7 @@ class RatingStars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int n = (votingAverage / 2).round();
+    int n = votingAverage.round();
 
     List<Widget> widgets = [];
 
