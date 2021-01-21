@@ -48,6 +48,7 @@ class _CartPageState extends State<CartPage> {
               child: Column(
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Daftar Pesanan'),
                       GestureDetector(

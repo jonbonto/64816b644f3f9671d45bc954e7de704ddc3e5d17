@@ -21,15 +21,26 @@ class CartButton extends StatelessWidget {
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('$numItem Item | Rp $total'),
-                Text('Termasuk ongkos kirim'),
+                Text(
+                  '$numItem Item | Rp $total',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  'Termasuk ongkos kirim',
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
             checkout
-                ? Text('CHECKOUT >')
+                ? Text(
+                    'CHECKOUT >',
+                    style: TextStyle(color: Colors.white),
+                  )
                 : Icon(
                     Icons.shop,
+                    color: Colors.white,
                   )
           ],
         ),

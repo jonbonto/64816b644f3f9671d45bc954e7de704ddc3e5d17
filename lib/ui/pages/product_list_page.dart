@@ -96,7 +96,7 @@ class _ProductListPageState extends State<ProductListPage> {
                   width: MediaQuery.of(context).size.width / 7,
                   color: selectedDate == dateInString
                       ? Colors.orange
-                      : Colors.grey,
+                      : Colors.grey[100],
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
