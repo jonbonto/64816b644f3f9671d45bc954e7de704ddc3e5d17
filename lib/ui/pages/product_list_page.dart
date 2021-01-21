@@ -19,60 +19,104 @@ class _ProductListPageState extends State<ProductListPage> {
   Widget build(BuildContext context) {
     bool showCart = cart.products.length != 0;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Kulinary"),
-      ),
-      body: Stack(
-        children: [
-          FutureBuilder<List<Product>>(
-              future: ProductServices.getProducts(getPage(selectedDate)),
-              builder: (_, snapshot) {
-                if (!snapshot.hasData)
-                  return SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: SpinKitFadingCircle(
-                      color: accentColor3,
-                    ),
-                  );
-                var products = snapshot.data;
-                final itemWidth =
-                    (MediaQuery.of(context).size.width - 2.5 * defaultMargin) /
+      body: SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverAppBar(
+                expandedHeight: 60.0,
+                floating: false,
+                pinned: false,
+                flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: false,
+                  titlePadding: const EdgeInsets.only(top: 20.0, left: 48),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Alamat Pengiriman',
+                        style: TextStyle(fontSize: 10, color: Colors.grey),
+                      ),
+                      Text(
+                        "Kulina",
+                        style: TextStyle(fontSize: 14.0, color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
+                leading: Icon(
+                  Icons.arrow_back,
+                  color: Colors.grey,
+                ),
+                backgroundColor: Colors.white,
+              ),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _SliverAppBarDelegate(
+                    child: PreferredSize(
+                  preferredSize: Size.fromHeight(60.0),
+                  child: Container(
+                    color: Theme.of(context).primaryColor,
+                    child: buildDatePicker(),
+                  ),
+                )),
+              ),
+            ];
+          },
+          body: Stack(
+            children: [
+              FutureBuilder<List<Product>>(
+                  future: ProductServices.getProducts(getPage(selectedDate)),
+                  builder: (_, snapshot) {
+                    if (!snapshot.hasData)
+                      return SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: SpinKitFadingCircle(
+                          color: accentColor3,
+                        ),
+                      );
+                    var products = snapshot.data;
+                    final itemWidth = (MediaQuery.of(context).size.width -
+                            2.5 * defaultMargin) /
                         2;
-                return GridView.count(
-                  crossAxisCount: 2,
-                  padding: EdgeInsets.all(defaultMargin),
-                  childAspectRatio: 1 / 2,
-                  crossAxisSpacing: 0.5 * defaultMargin,
-                  mainAxisSpacing: 1.5 * defaultMargin,
-                  children: List.generate(products.length, (index) {
-                    return ProductCard(
-                      cart: cart,
-                      width: itemWidth,
-                      onTap: () => setState(() {}),
-                      product: products[index],
+                    return GridView.count(
+                      crossAxisCount: 2,
+                      padding: EdgeInsets.all(defaultMargin),
+                      childAspectRatio: 1 / 2,
+                      crossAxisSpacing: 0.5 * defaultMargin,
+                      mainAxisSpacing: 1.5 * defaultMargin,
+                      children: List.generate(products.length, (index) {
+                        return ProductCard(
+                          cart: cart,
+                          width: itemWidth,
+                          onTap: () => setState(() {}),
+                          product: products[index],
+                        );
+                      }),
                     );
                   }),
-                );
-              }),
-          showCart
-              ? Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(defaultMargin),
-                    child: CartButton(
-                        numItem: cart.numItem,
-                        total: cart.totalPrice,
-                        onTap: () {
-                          print("go to cart screen");
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => CartPage()));
-                        }),
-                  ),
-                )
-              : SizedBox(),
-          buildDatePicker(),
-        ],
+              showCart
+                  ? Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(defaultMargin),
+                        child: CartButton(
+                            numItem: cart.numItem,
+                            total: cart.totalPrice,
+                            onTap: () {
+                              print("go to cart screen");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => CartPage()));
+                            }),
+                      ),
+                    )
+                  : SizedBox(),
+              // buildDatePicker(),
+            ],
+          ),
+        ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -94,9 +138,20 @@ class _ProductListPageState extends State<ProductListPage> {
               return GestureDetector(
                 child: Container(
                   width: MediaQuery.of(context).size.width / 7,
-                  color: selectedDate == dateInString
-                      ? Colors.orange
-                      : Colors.grey[100],
+                  decoration: (selectedDate == dateInString)
+                      ? BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment(0, 0.6),
+                            colors: [
+                              Colors.deepOrange[300],
+                              Colors.white,
+                            ],
+                          ),
+                        )
+                      : null,
+                  color:
+                      (selectedDate == dateInString) ? null : Colors.grey[200],
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -127,5 +182,28 @@ class _ProductListPageState extends State<ProductListPage> {
                 .inDays %
             3 +
         1;
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final PreferredSize child;
+
+  _SliverAppBarDelegate({this.child});
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return child;
+  }
+
+  @override
+  double get maxExtent => child.preferredSize.height;
+
+  @override
+  double get minExtent => child.preferredSize.height;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }
