@@ -1,26 +1,23 @@
 part of 'services.dart';
 
 class CartServices {
+  static final _cart = Cart();
   static Future<void> init() async {
-    if (cartDbServices.db == null) {
-      cartDbServices.init();
-      await Future.delayed(Duration(milliseconds: 5000));
-    }
     var items = await cartDbServices.fetchItems();
-    cart.products.addAll(items);
+    _cart.products.addAll(items);
     for (var item in items) {
-      cart.numItem += item.quantity;
-      cart.totalPrice += item.quantity * item.product.price;
+      _cart.numItem += item.quantity;
+      _cart.totalPrice += item.quantity * item.product.price;
     }
   }
 
   static void add(CartItem item) {
-    cart.add(item);
+    _cart.add(item);
     cartDbServices.addItem(item);
   }
 
   static void changeItem(CartItem item, int sum) {
-    var modItem = cart.changeQuantity(item, sum);
+    var modItem = _cart.changeQuantity(item, sum);
     if (modItem.quantity == 0) {
       cartDbServices.delete(modItem);
     } else {
@@ -29,14 +26,14 @@ class CartServices {
   }
 
   static void deleteItem(CartItem item) {
-    var modItem = cart.delete(item);
+    var modItem = _cart.delete(item);
     cartDbServices.delete(modItem);
   }
 
   static void clear() {
-    cart.clear();
+    _cart.clear();
     cartDbServices.clear();
   }
 
-  static get cart => cart;
+  static Cart get cart => _cart;
 }

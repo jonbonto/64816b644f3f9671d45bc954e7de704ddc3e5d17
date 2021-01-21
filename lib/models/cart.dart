@@ -82,5 +82,3 @@ class CartItem {
   bool isEqual(CartItem other) =>
       product.id == other.product.id && dateTime == other.dateTime;
 }
-
-Cart cart = Cart();

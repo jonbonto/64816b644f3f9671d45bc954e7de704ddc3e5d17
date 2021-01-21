@@ -3,11 +3,7 @@ part of 'services.dart';
 class CartDbServices {
   Database db;
 
-  CartDbServices() {
-    init();
-  }
-
-  void init() async {
+  Future<void> init() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, "items.db");
     db = await openDatabase(path, version: 1,
