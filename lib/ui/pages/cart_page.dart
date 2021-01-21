@@ -42,16 +42,17 @@ class _CartPageState extends State<CartPage> {
                   ),
                   Container(
                     height: MediaQuery.of(context).size.height - 20,
-                    child: ListView.builder(
-                      itemCount: cart.products.length,
-                      itemBuilder: (_, index) {
-                        return CartItemCard(
-                          product: cart.products[index],
-                          onTap: () {
-                            setState(() {});
-                          },
-                        );
-                      },
+                    child: GroupedListView<CartItem, String>(
+                      elements: cart.products,
+                      groupBy: (element) => element.dateTime,
+                      groupSeparatorBuilder: (String groupByValue) =>
+                          Text(groupByValue),
+                      itemBuilder: (context, CartItem element) => CartItemCard(
+                        item: element,
+                        onTap: () {
+                          setState(() {});
+                        },
+                      ),
                     ),
                   ),
                 ],

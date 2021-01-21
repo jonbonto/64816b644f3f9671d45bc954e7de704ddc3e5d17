@@ -92,6 +92,7 @@ class _ProductListPageState extends State<ProductListPage> {
                           cart: cart,
                           width: itemWidth,
                           onTap: () => setState(() {}),
+                          selectedDate: selectedDate,
                           product: products[index],
                         );
                       }),
@@ -134,11 +135,10 @@ class _ProductListPageState extends State<ProductListPage> {
           return Row(
             children: List<Widget>.generate(7, (ind) {
               DateTime date = startDate.add(Duration(days: 7 * index + ind));
-              String dateInString = '${date.year}-${date.month}-${date.day}';
               return GestureDetector(
                 child: Container(
                   width: MediaQuery.of(context).size.width / 7,
-                  decoration: (selectedDate == dateInString)
+                  decoration: (selectedDate == date.dateInString)
                       ? BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
@@ -150,8 +150,9 @@ class _ProductListPageState extends State<ProductListPage> {
                           ),
                         )
                       : null,
-                  color:
-                      (selectedDate == dateInString) ? null : Colors.grey[200],
+                  color: (selectedDate == date.dateInString)
+                      ? null
+                      : Colors.grey[200],
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -162,8 +163,7 @@ class _ProductListPageState extends State<ProductListPage> {
                 ),
                 onTap: () {
                   setState(() {
-                    selectedDate = dateInString;
-                    print(selectedDate);
+                    selectedDate = date.dateInString;
                   });
                 },
               );

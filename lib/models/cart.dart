@@ -1,37 +1,30 @@
 part of 'models.dart';
 
 class Cart {
-  List<Product> products = [];
+  List<CartItem> products = [];
   int numItem = 0;
   int totalPrice = 0;
 
-  void addProduct(Product product) {
-    Product addedProduct =
-        products.firstWhere((p) => p.id == product.id, orElse: () => null);
-    if (addedProduct != null) {
-      addedProduct.quantity++;
-    } else {
-      product.quantity = 1;
-      products.add(product);
-    }
+  void add(CartItem item) {
+    products.add(item);
     numItem++;
-    totalPrice += product.price;
+    totalPrice += item.product.price;
   }
 
-  void substractProduct(Product product) {
-    Product subProduct = products.firstWhere((p) => p.id == product.id);
-    subProduct.quantity--;
+  void changeQuantity(CartItem item, int sum) {
+    CartItem subProduct = products.firstWhere((p) => p.isEqual(item));
+    subProduct.quantity += sum;
     if (subProduct.quantity == 0) products.remove(subProduct);
-    numItem--;
-    totalPrice -= product.price;
+    numItem += sum;
+    totalPrice += subProduct.product.price * sum;
   }
 
-  void delete(Product product) {
-    Product subProduct = products.firstWhere((p) => p.id == product.id);
-    numItem -= subProduct.quantity;
-    totalPrice -= product.price * subProduct.quantity;
+  void delete(CartItem item) {
+    CartItem deletedItem = products.firstWhere((p) => p.isEqual(item));
+    numItem -= deletedItem.quantity;
+    totalPrice -= item.product.price * deletedItem.quantity;
 
-    products.remove(subProduct);
+    products.remove(deletedItem);
   }
 
   void clear() {
@@ -39,6 +32,19 @@ class Cart {
     numItem = 0;
     totalPrice = 0;
   }
+
+  bool contains(CartItem item) => products.any((p) => p.isEqual(item));
+}
+
+class CartItem {
+  Product product;
+  int quantity = 1;
+  String dateTime;
+
+  CartItem({this.product, this.dateTime});
+
+  bool isEqual(CartItem other) =>
+      product.id == other.product.id && dateTime == other.dateTime;
 }
 
 Cart cart = Cart();

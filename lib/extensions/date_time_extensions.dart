@@ -19,4 +19,6 @@ extension DateTimeExtension on DateTime {
         return "MIN";
     }
   }
+
+  String get dateInString => '${this.year}-${this.month}-${this.day}';
 }

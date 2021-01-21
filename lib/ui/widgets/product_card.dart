@@ -6,12 +6,19 @@ class ProductCard extends StatelessWidget {
   final Function onTap;
   final double width;
   final double ratingSize;
+  final String selectedDate;
 
   ProductCard(
-      {this.cart, this.product, this.onTap, this.width = 210, this.ratingSize});
+      {this.cart,
+      this.product,
+      this.onTap,
+      this.width = 210,
+      this.ratingSize,
+      this.selectedDate});
 
   @override
   Widget build(BuildContext context) {
+    CartItem item = CartItem(product: product, dateTime: selectedDate);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -39,14 +46,14 @@ class ProductCard extends StatelessWidget {
         ),
         Spacer(),
         Text('Rp ${product.price} termasuk ongkir'),
-        cart.products.contains(product)
+        cart.contains(item)
             ? Row(
                 children: [
                   Flexible(
                     flex: 1,
                     child: OutlinedButton(
                         onPressed: () {
-                          cart.substractProduct(product);
+                          cart.changeQuantity(item, -1);
                           onTap();
                         },
                         child: Text("-")),
@@ -56,13 +63,13 @@ class ProductCard extends StatelessWidget {
                     child: OutlinedButton(
                         onPressed: null,
                         child: Text(
-                            '${cart.products.firstWhere((p) => p.id == product.id).quantity}')),
+                            '${cart.products.firstWhere((p) => p.isEqual(item)).quantity}')),
                   ),
                   Flexible(
                     flex: 1,
                     child: OutlinedButton(
                         onPressed: () {
-                          cart.addProduct(product);
+                          cart.changeQuantity(item, 1);
                           onTap();
                         },
                         child: Text("+")),
@@ -71,7 +78,7 @@ class ProductCard extends StatelessWidget {
               )
             : OutlinedButton(
                 onPressed: () {
-                  cart.addProduct(product);
+                  cart.add(item);
                   onTap();
                 },
                 child: Text("Tambah ke Keranjang"),
