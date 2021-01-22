@@ -31,27 +31,46 @@ class CartItemCard extends StatelessWidget {
           flex: 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  SizedBox(width: 120, child: Text(product.name)),
-                  Spacer(),
-                  IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        CartServices.deleteItem(item);
-                        onTap();
-                      }),
-                ],
-              ),
-              Text(
-                '${product.packageName}',
-                overflow: TextOverflow.ellipsis,
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Rp ${product.price * item.quantity}'),
+                  SizedBox(
+                    width: 140,
+                    child: Text(
+                      product.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(
+                          color: Colors.black87, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.grey,
+                    ),
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 0),
+                    onPressed: () {
+                      CartServices.deleteItem(item);
+                      onTap();
+                    },
+                  ),
+                ],
+              ),
+              Text('${product.packageName}',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.grey, fontSize: 12)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Rp ${product.price * item.quantity}',
+                    style: TextStyle(
+                        color: Colors.black87, fontWeight: FontWeight.w600),
+                  ),
                   Container(
                     width: 120,
                     child: Row(

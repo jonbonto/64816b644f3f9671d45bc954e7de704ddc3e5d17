@@ -8,8 +8,8 @@ class RatingStars extends StatelessWidget {
 
   RatingStars(
       {this.votingAverage = 0,
-      this.starSize = 20,
-      this.fontSize = 12,
+      this.starSize = 16,
+      this.fontSize = 16,
       this.alignment = MainAxisAlignment.start});
 
   @override
@@ -22,8 +22,8 @@ class RatingStars extends StatelessWidget {
       Text(
         "${(votingAverage * 10).round() / 10}",
         style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w300,
+            color: Colors.black87,
+            fontWeight: FontWeight.w400,
             fontSize: fontSize),
       ),
     );

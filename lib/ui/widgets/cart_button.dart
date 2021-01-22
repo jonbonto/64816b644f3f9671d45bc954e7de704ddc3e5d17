@@ -25,18 +25,27 @@ class CartButton extends StatelessWidget {
               children: [
                 Text(
                   '$numItem Item | Rp $total',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 Text(
                   'Termasuk ongkos kirim',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w300,
+                  ),
                 ),
               ],
             ),
             checkout
                 ? Text(
                     'CHECKOUT >',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   )
                 : Icon(
                     Icons.shop,

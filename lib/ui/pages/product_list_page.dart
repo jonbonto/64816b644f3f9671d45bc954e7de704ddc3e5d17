@@ -45,7 +45,7 @@ class _ProductListPageState extends State<ProductListPage> {
                       ),
                       Text(
                         "Kulina",
-                        style: TextStyle(fontSize: 14.0, color: Colors.black),
+                        style: TextStyle(fontSize: 14.0, color: Colors.black87),
                       ),
                     ],
                   ),
@@ -72,22 +72,32 @@ class _ProductListPageState extends State<ProductListPage> {
           },
           body: Stack(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    fromStringToDate(selectedDate).dateAndDay,
-                    style: TextStyle(fontSize: 20, color: Colors.black),
-                  ),
-                  Expanded(
-                    child: ProductList(
-                      key: Key(selectedDate),
-                      cart: cart,
-                      selectedDate: selectedDate,
-                      onCartChange: () => setState(() {}),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        fromStringToDate(selectedDate).dateAndDay,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: ProductList(
+                        key: Key(selectedDate),
+                        cart: cart,
+                        selectedDate: selectedDate,
+                        onCartChange: () => setState(() {}),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               showCart
                   ? Align(
@@ -125,16 +135,22 @@ class _ProductListPageState extends State<ProductListPage> {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 8,
-        itemBuilder: (_, index) {
+        itemBuilder: (context, index) {
           return Row(
             children: List<Widget>.generate(7, (ind) {
               DateTime date = startDate.add(Duration(days: 7 * index + ind));
               var isDisabled =
                   date.isBefore(now) || date.weekday == 6 || date.weekday == 7;
+              var selected = selectedDate == date.dateInString;
+              Color textColor = selected
+                  ? Theme.of(context).accentColor
+                  : isDisabled
+                      ? Theme.of(context).disabledColor
+                      : Colors.black87;
               return GestureDetector(
                 child: Container(
                   width: MediaQuery.of(context).size.width / 7,
-                  decoration: (selectedDate == date.dateInString)
+                  decoration: (selected)
                       ? BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
@@ -146,14 +162,24 @@ class _ProductListPageState extends State<ProductListPage> {
                           ),
                         )
                       : null,
-                  color: (selectedDate == date.dateInString)
-                      ? null
-                      : Colors.grey[200],
+                  color: (selected) ? null : Colors.grey[200],
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${date.dayName.substring(0, 3).toUpperCase()}'),
-                      Text('${date.day}'),
+                      Text(
+                        '${date.dayName.substring(0, 3).toUpperCase()}',
+                        style: TextStyle(
+                          color: textColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        '${date.day}',
+                        style: TextStyle(
+                          color: textColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ],
                   ),
                 ),

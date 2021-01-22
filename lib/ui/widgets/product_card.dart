@@ -19,6 +19,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var newProduct = product.rating == 0 || product.rating == null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -33,24 +34,49 @@ class ProductCard extends StatelessWidget {
             ),
           ),
         ),
-        RatingStars(
-          votingAverage: product.rating,
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: newProduct
+              ? Chip(label: Text('BARU'), backgroundColor: Colors.lightGreen)
+              : RatingStars(
+                  votingAverage: product.rating,
+                ),
         ),
         Text(
           product.name,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
         ),
         Text(
-          'by ${product.brandName} - ${product.packageName}',
+          'by ${product.brandName}',
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
+          style: TextStyle(color: Colors.grey, fontSize: 14),
         ),
-        SizedBox(
-          height: 16,
+        Text(
+          '${product.packageName}',
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: TextStyle(color: Colors.grey, fontSize: 12),
         ),
         Spacer(),
-        Text('Rp ${product.price} termasuk ongkir'),
+        Row(
+          children: [
+            Text(
+              'Rp ${product.price}',
+              style:
+                  TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              width: 4,
+            ),
+            Text(
+              'termasuk ongkir',
+              style: TextStyle(color: Colors.grey, fontSize: 12),
+            ),
+          ],
+        ),
         quantity != 0
             ? Row(
                 children: [
@@ -66,7 +92,11 @@ class ProductCard extends StatelessWidget {
                     flex: 2,
                     child: OutlinedButton(
                       onPressed: null,
-                      child: Text('$quantity'),
+                      child: Text(
+                        '$quantity',
+                        style: TextStyle(
+                            color: Colors.black87, fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
                   Flexible(
@@ -83,6 +113,13 @@ class ProductCard extends StatelessWidget {
             : OutlinedButton(
                 onPressed: onAddToCart,
                 child: Text("Tambah ke Keranjang"),
+                style: ButtonStyle(
+                  side: MaterialStateProperty.all<BorderSide>(
+                    BorderSide(
+                      color: Colors.deepOrangeAccent,
+                    ),
+                  ),
+                ),
               ),
       ],
     );

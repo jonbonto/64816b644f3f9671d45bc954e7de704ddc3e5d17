@@ -61,7 +61,6 @@ class _ProductListState extends State<ProductList> {
           crossAxisSpacing: 0.5 * defaultMargin,
           mainAxisSpacing: 1.5 * defaultMargin,
         ),
-        padding: EdgeInsets.all(defaultMargin),
         itemBuilder: (BuildContext context, int index) {
           if (index >= _productList.length) {
             // Don't trigger if one async loading is already under way

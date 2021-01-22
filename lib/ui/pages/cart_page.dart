@@ -31,7 +31,7 @@ class _CartPageState extends State<CartPage> {
                       padding: EdgeInsets.only(left: 85 - top / 2, bottom: 16),
                       child: Text(
                         'Review Pesanan',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.black87),
                       ),
                     ),
                   );
@@ -41,7 +41,7 @@ class _CartPageState extends State<CartPage> {
               backgroundColor: Colors.white,
               elevation: 5,
               iconTheme: IconThemeData(
-                color: Colors.black,
+                color: Colors.black87,
               ),
             ),
           ];
@@ -58,26 +58,36 @@ class _CartPageState extends State<CartPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Daftar Pesanan'),
+                          Text(
+                            'Daftar Pesanan',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                           GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                CartServices.clear();
-                              });
-                            },
-                            child: Text('Hapus Pesanan'),
-                          )
+                              onTap: () {
+                                setState(() {
+                                  CartServices.clear();
+                                });
+                              },
+                              child: Text(
+                                'Hapus Pesanan',
+                                style: TextStyle(color: Colors.grey),
+                              )),
                         ],
+                      ),
+                      SizedBox(
+                        height: defaultMargin,
                       ),
                       Container(
                         child: GroupedListView<CartItem, String>(
                           shrinkWrap: true,
                           elements: cart.products,
-                          groupBy: (element) =>
-                              fromStringToDate(element.dateTime)
-                                  .dateAndDayShortMonth,
-                          groupSeparatorBuilder: (String groupByValue) =>
-                              Text(groupByValue),
+                          groupBy: (element) => element.dateTime,
+                          groupSeparatorBuilder: (String groupByValue) => Text(
+                              fromStringToDate(groupByValue)
+                                  .dateAndDayShortMonth),
                           itemBuilder: (context, CartItem element) =>
                               CartItemCard(
                             item: element,
@@ -164,7 +174,13 @@ class CartPageEmpty extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                Text('Keranjangmu masih kosong, nih')
+                Text(
+                  'Keranjangmu masih kosong, nih',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w600,
+                  ),
+                )
               ],
             ),
           ),
