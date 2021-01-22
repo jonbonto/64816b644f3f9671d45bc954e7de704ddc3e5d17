@@ -73,7 +73,9 @@ class _CartPageState extends State<CartPage> {
                         child: GroupedListView<CartItem, String>(
                           shrinkWrap: true,
                           elements: cart.products,
-                          groupBy: (element) => element.dateTime,
+                          groupBy: (element) =>
+                              fromStringToDate(element.dateTime)
+                                  .dateAndDayShortMonth,
                           groupSeparatorBuilder: (String groupByValue) =>
                               Text(groupByValue),
                           itemBuilder: (context, CartItem element) =>

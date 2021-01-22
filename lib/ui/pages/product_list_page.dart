@@ -72,53 +72,22 @@ class _ProductListPageState extends State<ProductListPage> {
           },
           body: Stack(
             children: [
-              FutureBuilder<List<Product>>(
-                future: ProductServices.getProducts(getPage(selectedDate)),
-                builder: (_, snapshot) {
-                  if (!snapshot.hasData)
-                    return SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: SpinKitFadingCircle(
-                        color: accentColor3,
-                      ),
-                    );
-                  var products = snapshot.data;
-                  final itemWidth = (MediaQuery.of(context).size.width -
-                          2.5 * defaultMargin) /
-                      2;
-
-                  return GridView.count(
-                    crossAxisCount: 2,
-                    padding: EdgeInsets.all(defaultMargin),
-                    childAspectRatio: 1 / 2,
-                    crossAxisSpacing: 0.5 * defaultMargin,
-                    mainAxisSpacing: 1.5 * defaultMargin,
-                    children: List.generate(
-                      products.length,
-                      (index) {
-                        CartItem item = CartItem(
-                            product: products[index], dateTime: selectedDate);
-                        final quantity = cart.contains(item)
-                            ? cart.products
-                                .firstWhere((p) => p.isEqual(item))
-                                .quantity
-                            : 0;
-                        return ProductCard(
-                          quantity: quantity,
-                          width: itemWidth,
-                          onAddToCart: () => setState(() {
-                            CartServices.add(item);
-                          }),
-                          onChangeQuantity: (int addition) => setState(() {
-                            CartServices.changeItem(item, addition);
-                          }),
-                          product: products[index],
-                        );
-                      },
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    fromStringToDate(selectedDate).dateAndDay,
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                  Expanded(
+                    child: ProductList(
+                      key: Key(selectedDate),
+                      cart: cart,
+                      selectedDate: selectedDate,
+                      onCartChange: () => setState(() {}),
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
               showCart
                   ? Align(
@@ -179,7 +148,7 @@ class _ProductListPageState extends State<ProductListPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${date.shortDayName}'),
+                      Text('${date.dayName.substring(1, 4).toUpperCase()}'),
                       Text('${date.day}'),
                     ],
                   ),
@@ -199,12 +168,7 @@ class _ProductListPageState extends State<ProductListPage> {
 
   int getPage(String date) {
     DateTime start = DateTime(2021);
-    var dateSplited = date.split('-').map(int.parse).toList();
-    return DateTime(dateSplited[0], dateSplited[1], dateSplited[2])
-                .difference(start)
-                .inDays %
-            3 +
-        1;
+    return fromStringToDate(date).difference(start).inDays % 3 + 1;
   }
 }
 

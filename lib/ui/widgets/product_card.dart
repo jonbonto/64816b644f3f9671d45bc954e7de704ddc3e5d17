@@ -36,10 +36,15 @@ class ProductCard extends StatelessWidget {
         RatingStars(
           votingAverage: product.rating,
         ),
-        Text(product.name),
+        Text(
+          product.name,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
         Text(
           'by ${product.brandName} - ${product.packageName}',
           overflow: TextOverflow.ellipsis,
+          maxLines: 1,
         ),
         SizedBox(
           height: 16,
