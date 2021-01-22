@@ -13,10 +13,6 @@ class _ProductListPageState extends State<ProductListPage> {
     super.initState();
     DateTime now = DateTime.now();
     selectedDate = '${now.year}-${now.month}-${now.day}';
-    cartDbServices.init().then((_) async {
-      await CartServices.init();
-      setState(() {});
-    });
   }
 
   @override
@@ -98,11 +94,13 @@ class _ProductListPageState extends State<ProductListPage> {
                           numItem: cart.numItem,
                           total: cart.totalPrice,
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => CartPage(),
-                              ),
-                            );
+                            Navigator.of(context)
+                                .push(
+                                  MaterialPageRoute(
+                                    builder: (_) => CartPage(),
+                                  ),
+                                )
+                                .then((_) => setState(() {}));
                           },
                         ),
                       ),
