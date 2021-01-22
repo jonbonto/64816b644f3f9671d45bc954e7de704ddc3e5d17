@@ -12,6 +12,10 @@ class _ProductListPageState extends State<ProductListPage> {
   void initState() {
     super.initState();
     DateTime now = DateTime.now();
+    while (now.weekday == 6 || now.weekday == 7) {
+      // skip sabtu minggu
+      now = now.add(Duration(days: 1));
+    }
     selectedDate = '${now.year}-${now.month}-${now.day}';
   }
 
@@ -125,6 +129,8 @@ class _ProductListPageState extends State<ProductListPage> {
           return Row(
             children: List<Widget>.generate(7, (ind) {
               DateTime date = startDate.add(Duration(days: 7 * index + ind));
+              var isDisabled =
+                  date.isBefore(now) || date.weekday == 6 || date.weekday == 7;
               return GestureDetector(
                 child: Container(
                   width: MediaQuery.of(context).size.width / 7,
@@ -151,11 +157,13 @@ class _ProductListPageState extends State<ProductListPage> {
                     ],
                   ),
                 ),
-                onTap: () {
-                  setState(() {
-                    selectedDate = date.dateInString;
-                  });
-                },
+                onTap: isDisabled
+                    ? null
+                    : () {
+                        setState(() {
+                          selectedDate = date.dateInString;
+                        });
+                      },
               );
             }),
           );
