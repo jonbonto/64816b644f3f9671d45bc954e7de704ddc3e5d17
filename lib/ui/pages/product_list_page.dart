@@ -148,7 +148,7 @@ class _ProductListPageState extends State<ProductListPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${date.dayName.substring(1, 4).toUpperCase()}'),
+                      Text('${date.dayName.substring(0, 3).toUpperCase()}'),
                       Text('${date.day}'),
                     ],
                   ),
@@ -164,11 +164,6 @@ class _ProductListPageState extends State<ProductListPage> {
         },
       ),
     );
-  }
-
-  int getPage(String date) {
-    DateTime start = DateTime(2021);
-    return fromStringToDate(date).difference(start).inDays % 3 + 1;
   }
 }
 

@@ -85,6 +85,8 @@ class _CartPageState extends State<CartPage> {
                               setState(() {});
                             },
                           ),
+                          itemComparator: (element1, element2) =>
+                              element1.product.id - element2.product.id,
                         ),
                       ),
                     ],

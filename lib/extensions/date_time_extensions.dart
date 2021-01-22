@@ -3,7 +3,7 @@ part of 'extensions.dart';
 extension DateTimeExtension on DateTime {
   String get dateAndDay => '$dayName, $day $monthName $year';
   String get dateAndDayShortMonth =>
-      '$dayName, $day ${monthName.substring(1, 4)} $year';
+      '$dayName, $day ${monthName.substring(0, 3)} $year';
 
   String get dayName {
     switch (this.weekday) {
