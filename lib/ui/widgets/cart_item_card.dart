@@ -2,9 +2,10 @@ part of 'widgets.dart';
 
 class CartItemCard extends StatelessWidget {
   final CartItem item;
-  final Function onTap;
+  final Function onChangeQuantity;
+  final Function onDelete;
 
-  CartItemCard({this.item, this.onTap});
+  CartItemCard({this.item, this.onChangeQuantity, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +54,7 @@ class CartItemCard extends StatelessWidget {
                     ),
                     alignment: Alignment.centerRight,
                     padding: EdgeInsets.only(right: 0),
-                    onPressed: () {
-                      CartServices.deleteItem(item);
-                      onTap();
-                    },
+                    onPressed: onDelete,
                   ),
                 ],
               ),
@@ -79,8 +77,7 @@ class CartItemCard extends StatelessWidget {
                           flex: 1,
                           child: OutlinedButton(
                               onPressed: () {
-                                CartServices.changeItem(item, -1);
-                                onTap();
+                                onChangeQuantity(-1);
                               },
                               child: Text("-")),
                         ),
@@ -93,8 +90,7 @@ class CartItemCard extends StatelessWidget {
                           flex: 1,
                           child: OutlinedButton(
                               onPressed: () {
-                                CartServices.changeItem(item, 1);
-                                onTap();
+                                onChangeQuantity(1);
                               },
                               child: Text("+")),
                         ),
