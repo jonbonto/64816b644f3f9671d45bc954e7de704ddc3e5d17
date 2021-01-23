@@ -127,74 +127,112 @@ class _ProductListPageState extends State<ProductListPage> {
     );
   }
 
+  final CarouselController _controller = CarouselController();
+
   Widget buildDatePicker() {
     DateTime now = DateTime.now();
     DateTime startDate = now.subtract(Duration(days: now.weekday - 1));
-    return Container(
-      height: 60,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 8,
-        itemBuilder: (context, index) {
-          return Row(
-            children: List<Widget>.generate(7, (ind) {
-              DateTime date = startDate.add(Duration(days: 7 * index + ind));
-              var isDisabled =
-                  date.isBefore(now) || date.weekday == 6 || date.weekday == 7;
-              var selected = selectedDate == date.dateInString;
-              Color textColor = selected
-                  ? Theme.of(context).accentColor
-                  : isDisabled
-                      ? Theme.of(context).disabledColor
-                      : Colors.black87;
-              return GestureDetector(
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 7,
-                  decoration: (selected)
-                      ? BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment(0, 0.6),
-                            colors: [
-                              Colors.deepOrange[300],
-                              Colors.white,
-                            ],
-                          ),
-                        )
-                      : null,
-                  color: (selected) ? null : Colors.grey[200],
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${date.dayName.substring(0, 3).toUpperCase()}',
-                        style: TextStyle(
-                          color: textColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        '${date.day}',
-                        style: TextStyle(
-                          color: textColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+
+    List<Widget> items = [];
+
+    for (var index = 0; index < 8; index++) {
+      var children = List<Widget>.generate(7, (ind) {
+        DateTime date = startDate.add(Duration(days: 7 * index + ind));
+        var isDisabled =
+            date.isBefore(now) || date.weekday == 6 || date.weekday == 7;
+        var selected = selectedDate == date.dateInString;
+        Color textColor = selected
+            ? Theme.of(context).accentColor
+            : isDisabled
+                ? Theme.of(context).disabledColor
+                : Colors.black87;
+        return GestureDetector(
+          child: Container(
+            width: (MediaQuery.of(context).size.width - 72) / 7,
+            decoration: (selected)
+                ? BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment(0, 0.6),
+                      colors: [
+                        Colors.deepOrange[300],
+                        Colors.white,
+                      ],
+                    ),
+                  )
+                : null,
+            color: (selected) ? null : Colors.grey[200],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${date.dayName.substring(0, 3).toUpperCase()}',
+                  style: TextStyle(
+                    color: textColor,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                onTap: isDisabled
-                    ? null
-                    : () {
-                        setState(() {
-                          selectedDate = date.dateInString;
-                        });
-                      },
-              );
-            }),
-          );
-        },
-      ),
+                Text(
+                  '${date.day}',
+                  style: TextStyle(
+                    color: textColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          onTap: isDisabled
+              ? null
+              : () {
+                  setState(() {
+                    selectedDate = date.dateInString;
+                  });
+                },
+        );
+      });
+
+      items.add(Row(
+        children: children,
+      ));
+    }
+
+    return Stack(
+      children: [
+        Container(
+          color: Colors.grey[200],
+          padding: const EdgeInsets.symmetric(horizontal: 36.0),
+          child: CarouselSlider(
+            items: items,
+            options: CarouselOptions(
+                enlargeCenterPage: true,
+                height: 60,
+                viewportFraction: 1,
+                enableInfiniteScroll: false),
+            carouselController: _controller,
+          ),
+        ),
+        Align(
+          alignment: Alignment(-1.1, 0),
+          child: FlatButton(
+            onPressed: () => _controller.previousPage(),
+            child: Icon(Icons.arrow_back,
+                size: 24, color: Colors.deepOrangeAccent),
+            shape: CircleBorder(),
+            color: Colors.white,
+          ),
+        ),
+        Align(
+          alignment: Alignment(1.1, 0),
+          child: FlatButton(
+            onPressed: () => _controller.nextPage(),
+            child: Icon(Icons.arrow_forward,
+                size: 24, color: Colors.deepOrangeAccent),
+            shape: CircleBorder(),
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 }
